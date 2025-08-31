@@ -118,6 +118,39 @@ Run the scanner, and breakout alerts will flow directly into your Discord channe
 
 ---
 
+## 🔧 Telegram Setup
+
+1. Create a Telegram Bot
+2. Message **[@BotFather](https://t.me/BotFather)** on Telegram.  
+3. Use the `/newbot` command.  
+4. Follow the prompts to create your bot.  
+5. Copy the **bot token** (it looks like `123456789:ABCDEF...`).  
+
+---
+
+###  Get Your Chat ID
+
+#### Option A - Personal Chat
+1. Send a message to your bot.  
+2. Visit: https://api.telegram.org/bot
+3. Look for your `chat.id` in the JSON response.  
+
+#### Option B - Channel/Group
+1. Add your bot to the channel or group as **admin**.  
+2. The chat ID will be **negative** (e.g., `-1001234567890`).  
+
+---
+
+### Update Configuration
+Replace the placeholder values in your script:  
+
+```python
+TELEGRAM_BOT_TOKEN = "ADD YOUR TELEGRAM BOT TOKEN HERE"
+TELEGRAM_CHAT_ID = "ADD YOUR TELEGRAM CHAT ID HERE"
+```
+
+---
+
 ## 📦 Deployment
 
 ### Local (Python 3.10+)

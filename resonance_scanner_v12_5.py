@@ -3,7 +3,9 @@
 # W (band_width): volatility range = (high - low) / end_price * 100
 # High Δ = trending strongly (potential breakout)
 # High W = volatile (good for faster scalping)
-
+import socketio
+import threading
+from flask import Flask
 from datetime import timedelta, datetime, timezone
 import time
 import requests
@@ -352,6 +354,10 @@ USDC_ONLY_COINS = []
 
 DISCORD_WEBHOOK = "ADD YOUR DISCORD WEBHOOK HERE"
 
+# === Telegram Configuration ===
+TELEGRAM_BOT_TOKEN = "ADD YOUR TELEGRAM BOT TOKEN HERE"  # Get from @BotFather
+TELEGRAM_CHAT_ID = "ADD YOUR TELEGRAM CHAT ID HERE"      # Your chat ID or channel ID
+
 # === Breakout Scanner Parameters ===
 CANDLE_INTERVAL = 60  # seconds
 
@@ -404,6 +410,25 @@ def send_discord_alert(pair, price, vol_info):
         "content": f"🚨 **BREAKOUT DETECTED** 🚨\n**Pair**: `{pair}`\n**Price**: `${price:.8f}`\n**Vol Spike**: {vol_info}\n**Time**: {datetime.now(timezone.utc).strftime('%H:%M:%S UTC')}"
     }
     requests.post(DISCORD_WEBHOOK, json=data)
+
+def send_telegram_alert(message: str):
+    """Send alert message to Telegram bot"""
+    try:
+        if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+            return  # Skip if not configured
+            
+        url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+        data = {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": message,
+            "parse_mode": "Markdown",
+            "disable_web_page_preview": True
+        }
+        response = requests.post(url, json=data, timeout=10)
+        if response.status_code != 200:
+            print(f"❌ Telegram API error: {response.status_code} - {response.text}", flush=True)
+    except Exception as e:
+        print(f"❌ Failed to send Telegram message: {e}", flush=True)
 
 def is_breakout_band(cset, breakout_threshold, volume_spike_ratio):
     """
@@ -609,7 +634,9 @@ while True:
                     band_details=band_details,
                     candle_interval_sec=CANDLE_INTERVAL
                 )
+                # Send to both Discord and Telegram
                 send_discord_rich(msg)
+                send_telegram_alert(msg)
             else:
                 print(f"{pair} | Δ: {percent_change:.2f}% | W: {band_width:.2f}%")
                 
@@ -618,3 +645,290 @@ while True:
 
     print("Sleeping 2 seconds...\n")
     time.sleep(2)
+
+# WebUI Integration Class
+class WebUIIntegration:
+    def __init__(self, socketio_client=None):
+        self.socketio_client = socketio_client
+        self.stats = {
+            'total_scanned': 0,
+            'total_alerts': 0,
+            'breakouts_today': 0,
+            'start_time': datetime.now(timezone.utc),
+        }
+        
+    def emit_scan_result(self, symbol, change, band_width):
+        """Emit scan result to WebUI"""
+        if not self.socketio_client:
+            return
+            
+        data = {
+            'type': 'scan_result',
+            'symbol': symbol,
+            'change': float(change),
+            'band_width': float(band_width),
+            'timestamp': datetime.now(timezone.utc).isoformat()
+        }
+        
+        try:
+            self.socketio_client.emit('scan_update', data)
+            self.stats['total_scanned'] += 1
+        except Exception as e:
+            print(f"WebUI emit error: {e}")
+    
+    def emit_breakout_alert(self, symbol, price, change, band_width, bands):
+        """Emit breakout alert to WebUI"""
+        if not self.socketio_client:
+            return
+            
+        data = {
+            'type': 'breakout_alert',
+            'symbol': symbol,
+            'price': float(price),
+            'change': float(change),
+            'band_width': float(band_width),
+            'bands': bands,
+            'timestamp': datetime.now(timezone.utc).isoformat()
+        }
+        
+        try:
+            self.socketio_client.emit('breakout_alert', data)
+            self.stats['total_alerts'] += 1
+            self.stats['breakouts_today'] += 1
+        except Exception as e:
+            print(f"WebUI emit error: {e}")
+    
+    def get_stats(self):
+        """Get current statistics"""
+        return self.stats.copy()
+
+# Initialize WebUI integration
+webui = WebUIIntegration()
+
+# Modified scanner settings that can be controlled from WebUI
+class ScannerSettings:
+    def __init__(self):
+        self.scan_interval = 2
+        self.volume_floor = 2000.0
+        self.alert_mode = 'simple'
+        self.fast_threshold = 0.013
+        self.medium_threshold = 0.018
+        self.slow_threshold = 0.024
+        self.fast_ratio = 1.3
+        self.medium_ratio = 1.7
+        self.slow_ratio = 2.2
+        self.discord_webhook = ""
+        self.telegram_token = ""
+        self.telegram_chat_id = ""
+        
+    def update_from_webui(self, settings_dict):
+        """Update settings from WebUI"""
+        for key, value in settings_dict.items():
+            if hasattr(self, key):
+                # Convert string values to appropriate types
+                if key in ['scan_interval']:
+                    setattr(self, key, int(value))
+                elif key in ['volume_floor', 'fast_threshold', 'medium_threshold', 'slow_threshold', 
+                           'fast_ratio', 'medium_ratio', 'slow_ratio']:
+                    setattr(self, key, float(value))
+                else:
+                    setattr(self, key, str(value))
+                    
+        print(f"Settings updated: {settings_dict}")
+
+# Global settings instance
+settings = ScannerSettings()
+
+# Modified main scanning function
+def run_scanner_with_webui():
+    """
+    Modified version of your main scanning loop that integrates with WebUI
+    Replace your existing main loop with this function
+    """
+    global settings, webui
+    
+    print("\n--- Resonance.ai Breakout Scanner with WebUI Integration ---")
+    
+    while True:
+        if not scanner_running:  # This would be controlled by WebUI
+            time.sleep(1)
+            continue
+            
+        for pair in COINS + USDC_ONLY_COINS:
+            try:
+                print(f"Scanning {pair}...")
+                candles = get_candles(pair)
+
+                if not candles:
+                    log_coin_scan(pair)
+                    continue
+
+                start_price = candles[0][4]
+                end_price = candles[-1][4]
+                percent_change = ((end_price - start_price) / start_price) * 100
+
+                highs = [c[2] for c in candles]
+                lows = [c[3] for c in candles]
+                band_width = (max(highs) - min(lows)) / end_price * 100
+
+                # Emit scan result to WebUI
+                webui.emit_scan_result(pair, percent_change, band_width)
+
+                # Use dynamic settings from WebUI
+                b1, i1 = is_breakout_band(candles[-CANDLE_COUNT_FAST:], settings.fast_threshold, settings.fast_ratio)
+                b2, i2 = is_breakout_band(candles[-CANDLE_COUNT_MEDIUM:], settings.medium_threshold, settings.medium_ratio)
+                b3, i3 = is_breakout_band(candles[-CANDLE_COUNT_SLOW:], settings.slow_threshold, settings.slow_ratio)
+
+                band_details = []
+                band_names = []
+                if b1: 
+                    band_details.append({"name": "FAST", "stats": stats_from_info(i1)})
+                    band_names.append("FAST")
+                if b2: 
+                    band_details.append({"name": "MEDIUM", "stats": stats_from_info(i2)})
+                    band_names.append("MEDIUM")
+                if b3: 
+                    band_details.append({"name": "SLOW", "stats": stats_from_info(i3)})
+                    band_names.append("SLOW")
+
+                if band_details:
+                    print(
+                        f"[SELECTED] {pair} | Δ: {percent_change:.2f}% | W: {band_width:.2f}% | "
+                        f"Hits: {[bd['name'] for bd in band_details]}",
+                        flush=True
+                    )
+                    
+                    # Build alert message using current settings
+                    msg = build_alert_message(
+                        pair=pair,
+                        price=end_price,
+                        percent_change=percent_change,
+                        band_width=band_width,
+                        band_details=band_details,
+                        candle_interval_sec=CANDLE_INTERVAL
+                    )
+                    
+                    # Send alerts (Discord/Telegram)
+                    if settings.discord_webhook:
+                        send_discord_rich(msg)
+                    if settings.telegram_token and settings.telegram_chat_id:
+                        send_telegram_alert(msg)
+                    
+                    # Emit to WebUI
+                    webui.emit_breakout_alert(pair, end_price, percent_change, band_width, band_names)
+                else:
+                    print(f"{pair} | Δ: {percent_change:.2f}% | W: {band_width:.2f}%")
+                    
+            except Exception as e:
+                print(f"Error processing {pair}: {e}")
+
+        print(f"Sleeping {settings.scan_interval} seconds...\n")
+        time.sleep(settings.scan_interval)
+
+# WebUI Server Integration
+def start_webui_server():
+    """Start the WebUI server in a separate thread"""
+    import subprocess
+    import sys
+    
+    try:
+        # Start the Flask server
+        subprocess.Popen([sys.executable, "app.py"])
+        print("🌐 WebUI Server starting at http://localhost:5000")
+    except Exception as e:
+        print(f"Failed to start WebUI server: {e}")
+
+# Settings API endpoint integration
+def handle_webui_settings_update(new_settings):
+    """Handle settings update from WebUI"""
+    global settings, ABSOLUTE_DOLLAR_VOLUME_MIN, SIMPLE_MODE
+    
+    settings.update_from_webui(new_settings)
+    
+    # Update global variables
+    ABSOLUTE_DOLLAR_VOLUME_MIN = settings.volume_floor
+    SIMPLE_MODE = (settings.alert_mode == 'simple')
+    
+    # Update alert configurations
+    global DISCORD_WEBHOOK, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+    DISCORD_WEBHOOK = settings.discord_webhook
+    TELEGRAM_BOT_TOKEN = settings.telegram_token
+    TELEGRAM_CHAT_ID = settings.telegram_chat_id
+
+# WebSocket client for communicating with WebUI
+def setup_socketio_client():
+    """Setup SocketIO client for WebUI communication"""
+    global webui
+    
+    try:
+        sio = socketio.SimpleClient()
+        sio.connect('http://localhost:5000')
+        webui.socketio_client = sio
+        print("✅ Connected to WebUI server")
+        return sio
+    except Exception as e:
+        print(f"⚠️ Could not connect to WebUI server: {e}")
+        return None
+
+# Integration wrapper function
+def run_with_webui_integration():
+    """
+    Main function to run the scanner with WebUI integration
+    Replace your existing main execution with this
+    """
+    global webui, settings
+    
+    # Start WebUI server
+    webui_thread = threading.Thread(target=start_webui_server, daemon=True)
+    webui_thread.start()
+    
+    # Wait a moment for server to start
+    time.sleep(3)
+    
+    # Setup WebSocket connection
+    sio_client = setup_socketio_client()
+    webui.socketio_client = sio_client
+    
+    # Run the scanner
+    try:
+        run_scanner_with_webui()
+    except KeyboardInterrupt:
+        print("\n🛑 Scanner stopped by user")
+        if sio_client:
+            sio_client.disconnect()
+    except Exception as e:
+        print(f"❌ Scanner error: {e}")
+        if sio_client:
+            sio_client.disconnect()
+
+# Usage Instructions:
+"""
+To integrate with your existing scanner:
+
+1. Add these imports at the top of your resonance_scanner_v12_5.py:
+   import socketio
+   import threading
+   from flask import Flask
+
+2. Replace your existing main loop execution with:
+   if __name__ == "__main__":
+       run_with_webui_integration()
+
+3. Install required packages:
+   pip install flask flask-socketio python-socketio
+
+4. Create the app.py file (from the Flask Backend artifact)
+
+5. Start your scanner:
+   python resonance_scanner_v12_5.py
+
+6. Access WebUI at:
+   http://localhost:5000
+
+The WebUI will show:
+- Real-time scanning results
+- Live breakout alerts
+- Configurable settings
+- Performance statistics
+- Alert testing capabilities
+"""

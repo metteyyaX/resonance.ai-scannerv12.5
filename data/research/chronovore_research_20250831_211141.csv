@@ -1,0 +1,19 @@
+product_id,detected_at_utc,detected_at,detection_price,entry_price,target_price,stop_price,outcome,minutes_to_outcome,pnl_pct_after_fees,mfe_pct,mae_pct,rsi,macd_hist,source_file,notes
+SAPIEN-USD,2025-08-31 07:40:01+00:00,1756626001,0.1542,0.1545084,0.17304940800000002,0.14678297999999998,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+DIMO-USD,2025-08-31 08:20:18+00:00,1756628418,0.07842,0.07857684000000001,0.08800606080000002,0.07464799800000001,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+LOKA-USD,2025-08-31 08:52:04+00:00,1756630324,0.179,0.179358,0.20088096,0.1703901,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+LRC-USD,2025-08-31 09:39:00+00:00,1756633140,0.0992,0.0993984,0.11132620800000001,0.09442848,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+SAPIEN-USD,2025-08-31 10:40:00+00:00,1756636800,0.1457,0.1459914,0.16351036800000002,0.13869183,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+NCT-USD,2025-08-31 10:54:00+00:00,1756637640,0.02073,0.02077146,0.0232640352,0.019732886999999998,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+POL-USD,2025-08-31 12:16:00+00:00,1756642560,0.2901,0.2906802,0.32556182400000006,0.27614619,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+LOKA-USD,2025-08-31 12:43:08+00:00,1756644188,0.188,0.188376,0.21098112,0.17895719999999998,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+SAPIEN-USD,2025-08-31 13:02:03+00:00,1756645323,0.1483,0.1485966,0.166428192,0.14116677,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+POLS-USD,2025-08-31 13:33:04+00:00,1756647184,0.2338,0.23426760000000002,0.26237971200000004,0.22255422,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+ELA-USD,2025-08-31 13:36:30+00:00,1756647390,1.461,1.4639220000000002,1.6395926400000003,1.3907259,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+RLC-USD,2025-08-31 13:53:00+00:00,1756648380,1.2723,1.2748446,1.427825952,1.2111023699999999,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+IP-USD,2025-08-31 13:56:00+00:00,1756648560,7.763,7.778526,8.711949120000002,7.3895997,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+LOKA-USD,2025-08-31 15:26:01+00:00,1756653961,0.1963,0.1966926,0.220295712,0.18685796999999998,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+PIRATE-USD,2025-08-31 15:30:17+00:00,1756654217,0.0369,0.0369738,0.041410656000000004,0.03512511,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+LRC-USD,2025-08-31 15:32:00+00:00,1756654320,0.116,0.116232,0.13017984000000002,0.1104204,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+SKL-USD,2025-08-31 15:36:07+00:00,1756654567,0.033,0.033066,0.037033920000000005,0.031412699999999995,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+SAPIEN-USD,2025-08-31 15:41:01+00:00,1756654861,0.1463,0.14659260000000002,0.16418371200000004,0.13926297,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed

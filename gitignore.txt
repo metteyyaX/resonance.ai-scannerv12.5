@@ -1,0 +1,30 @@
+# ---- Python cache / build ----
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+build/
+dist/
+
+# ---- Virtual environments ----
+.venv/
+venv/
+env/
+
+# ---- Local config & secrets ----
+.env
+*.secret.json
+
+# ---- Data & logs (runtime only) ----
+data/
+logs/
+
+# ---- IDE/editor settings ----
+.vscode/
+.idea/
+.DS_Store
+
+# ---- OS files ----
+Thumbs.db

@@ -1,0 +1,100 @@
+{
+  "universe": {
+    "quote_asset": "USD",
+    "max_pairs": 150,
+    "max_spread": 0.005,
+    "min_24h_vol_quote": 300000
+  },
+
+  "SCANNER": {
+    "REFRESH_SECONDS": 1.0,
+    "UNIVERSE_PATH": "/mnt/app/data/universe/coinbase/universe.latest.jsonl",
+
+    "WS": {
+      "ENABLED": true,
+      "URL": "wss://ws-feed.exchange.coinbase.com",
+      "CHANNEL": "ticker",
+      "EMIT": "on_trade",
+      "RECONNECT_SECONDS": 5,
+      "BACKFILL": { "ENABLED": true, "BARS": 60 }
+    },
+
+    "SINGLE_BAND": {
+      "CANDLES": 5,
+      "BREAKOUT_THRESHOLD": 0.008,
+      "VOLUME_SPIKE_RATIO": 1.3
+    },
+
+    "POST_FILTERS": {
+      "ENABLED": true,
+      "FILTER_LOGIC": "ALL",
+      "RSI": { "ENABLED": true, "PERIOD": 14, "LOW": 50, "HIGH": 65, "PRESET": "DEFAULT" },
+      "VPM": { "ENABLED": true, "LOOKBACK_MIN": 5, "MIN_USD": 5000 },
+      "MACD": { "ENABLED": true, "FAST": 8, "SLOW": 17, "SIGNAL": 5, "RULE": "hist_up" }
+    },
+
+    "DUPLICATE_CONTROL": { "MIN_SECONDS_BETWEEN_ALERTS_PER_PAIR": 180 },
+    "LIMITS": { "ABS_VOL_MIN_USD": 2000, "CANDLE_INTERVAL_SECONDS": 60 },
+
+    "LOGGING": {
+      "SAVE_DETECTIONS": true,
+      "CSV_PATH": "/mnt/app/data/detections.latest.csv",
+      "JSONL_PATH": "/mnt/app/data/detections.latest.jsonl"
+    },
+
+    "DISCORD": {
+      "WEBHOOK_DETECTIONS": "enter your discord detection channel webhook here",
+      "WEBHOOK_HEALTH": "enter your discord health webhook here"
+    },
+
+    "NETWORK": { "HTTP_TIMEOUT": 20, "HTTP_RETRIES": 3, "REST_THROTTLE_MS": 80 }
+  },
+
+  "RESEARCH": {
+    "DETECTIONS_PATH": "./data/detections/detections.latest.jsonl",
+    "OUT_DIR": "./data/research",
+
+    "LOOKBACK_DAYS": 2,
+    "TP_PCT": 12.0,
+    "SL_PCT": 5.0,
+    "FEE_BPS": 236,
+    "SLIP_BPS": 20,
+    "MAX_HOLD_MIN": 180,
+    "FIRST_TOUCH": "conservative_stop_first",
+
+    "FRESH_SKIP_MIN": 0,
+    "FETCH_RETRIES": 5,
+    "FETCH_RETRY_WAIT": 2,
+    "MISSING_DATA_POLICY": "loss",
+
+    "VOL_MA_WINDOW": 20,
+    "OVERHIGH_LOOKBACK_MIN": 60,
+    "RSI_LEN": 14,
+    "MACD_FAST": 12,
+    "MACD_SLOW": 26,
+    "MACD_SIGNAL": 9,
+
+    "PRODUCT_FILTER": "*-USD",
+    "COINBASE_ENDPOINT": "https://api.exchange.coinbase.com",
+
+    "FILTERS": {
+      "ENABLED": true,
+      "FILTER_LOGIC": "ALL",
+      "RSI": { "ENABLED": true, "PERIOD": 14, "LOW": 50, "HIGH": 70 },
+      "VPM": { "ENABLED": true, "LOOKBACK_MIN": 5, "MIN_USD": 2000 },
+      "MACD": { "ENABLED": true, "RULE": "hist_up" }
+    }
+  },
+
+  "discord": {
+    "DISCORD_WEBHOOK_DETECTIONS": "enter your discord detection webhook here. this is for the TOP 50",
+    "DISCORD_WEBHOOK_HEALTH": "enter your discord detect webhook here. This is for the top 50"
+  },
+
+  "ops": {
+    "UNIVERSE_FILE": "/mnt/app/data/universe/coinbase/universe.latest.jsonl",
+    "REST_THROTTLE_MS": 80,
+    "REFRESH_INTERVAL_MINUTES": 120,
+    "RUN_ONCE": false
+  }
+}

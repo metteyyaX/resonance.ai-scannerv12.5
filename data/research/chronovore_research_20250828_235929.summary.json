@@ -1,0 +1,47 @@
+{
+  "config": {
+    "detections_path": "./data/detections/detections.latest.jsonl",
+    "detections_glob": "**/*.json*",
+    "recursive": true,
+    "list_only": false,
+    "lookback_days": 14,
+    "product_filter": "",
+    "tp_pct": 3.0,
+    "sl_pct": 1.0,
+    "fee_bps": 5.0,
+    "slip_bps": 0.0,
+    "max_hold_min": 180,
+    "granularity_sec": 60,
+    "vol_ma_window": 20,
+    "overhigh_lookback_min": 60,
+    "rsi_len": 14,
+    "macd_fast": 12,
+    "macd_slow": 26,
+    "macd_signal": 9,
+    "first_touch_mode": "conservative_stop_first",
+    "out_dir": "./data/research",
+    "coinbase_endpoint": "https://api.exchange.coinbase.com",
+    "discord_webhook": null
+  },
+  "counts": {
+    "total": 63,
+    "wins": 10,
+    "losses": 5,
+    "timeouts": 0,
+    "bad_data": 48
+  },
+  "performance": {
+    "win_rate": 0.6666666666666666,
+    "avg_pnl_after_fees_pct": 1.6166666666666665,
+    "median_minutes_to_outcome": 19,
+    "expectancy_pct_per_trade": 0.38492063492063494,
+    "avg_win_pct": 2.95,
+    "avg_loss_pct": -1.05,
+    "avg_timeout_pct": null
+  },
+  "generated_at_utc": "2025-08-28T23:59:29.459053",
+  "output_files": {
+    "csv": "./data/research\\chronovore_research_20250828_235929.csv",
+    "json": "./data/research\\chronovore_research_20250828_235929.summary.json"
+  }
+}

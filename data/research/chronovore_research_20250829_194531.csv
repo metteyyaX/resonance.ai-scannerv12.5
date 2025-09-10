@@ -1,0 +1,10 @@
+product_id,detected_at_utc,detected_at,detection_price,entry_price,target_price,stop_price,outcome,minutes_to_outcome,pnl_pct_after_fees,mfe_pct,mae_pct,rsi,macd_hist,source_file,notes
+MAMO-USD,2025-08-29 18:36:00+00:00,1756492560,0.12511,0.12536022,0.131628231,0.1215994134,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+SPA-USD,2025-08-29 18:43:59+00:00,1756493039,0.012036,0.012060072,0.0126630756,0.011698269839999999,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+POLS-USD,2025-08-29 18:44:01+00:00,1756493041,0.2581,0.2586162,0.27154701000000003,0.250857714,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+PYTH-USD,2025-08-29 18:46:00+00:00,1756493160,0.1973,0.1976946,0.20757933,0.191763762,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+NEON-USD,2025-08-29 18:46:08+00:00,1756493168,0.14356,0.14384712,0.151039476,0.13953170639999998,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+USELESS-USD,2025-08-29 18:46:10+00:00,1756493170,0.2003,0.2007006,0.21073563,0.194679582,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+SPA-USD,2025-08-29 18:49:59+00:00,1756493399,0.012728,0.012753456,0.0133911288,0.01237085232,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+BONK-USD,2025-08-29 18:52:59+00:00,1756493579,2.058e-05,2.062116e-05,2.1652218e-05,2.00025252e-05,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed
+SPA-USD,2025-08-29 18:55:59+00:00,1756493759,0.013096,0.013122192,0.0137783016,0.01272852624,loss,,,,,,,./data/detections/detections.latest.jsonl,fetch-failed

@@ -1,0 +1,62 @@
+{
+  "config": {
+    "detections_path": "./data/detections/detections.latest.jsonl",
+    "fetch_retries": 2,
+    "fetch_retry_wait_sec": 2,
+    "fresh_skip_min": 5,
+    "detections_glob": "**/*.json*",
+    "recursive": true,
+    "list_only": false,
+    "lookback_days": 1,
+    "product_filter": "*-USD",
+    "tp_pct": 8.0,
+    "sl_pct": 3.0,
+    "fee_bps": 236.0,
+    "slip_bps": 20.0,
+    "max_hold_min": 180,
+    "granularity_sec": 60,
+    "vol_ma_window": 20,
+    "overhigh_lookback_min": 60,
+    "rsi_len": 14,
+    "macd_fast": 12,
+    "macd_slow": 26,
+    "macd_signal": 9,
+    "first_touch_mode": "conservative_stop_first",
+    "out_dir": "./data/research",
+    "coinbase_endpoint": "https://api.exchange.coinbase.com",
+    "discord_webhook": null,
+    "filters_enabled": false,
+    "filter_logic": "ALL",
+    "rsi_enable": true,
+    "rsi_period": 14,
+    "rsi_low": 50.0,
+    "rsi_high": 70.0,
+    "vpm_enable": true,
+    "vpm_lookback_min": 5,
+    "vpm_min_usd": 3000.0,
+    "macd_enable": true,
+    "macd_rule": "hist_up"
+  },
+  "counts": {
+    "total": 63,
+    "wins": 4,
+    "losses": 5,
+    "timeouts": 5,
+    "filtered": 0,
+    "bad_data": 49
+  },
+  "performance": {
+    "win_rate": 0.4444444444444444,
+    "avg_pnl_after_fees_pct": -1.755995992858422,
+    "median_minutes_to_outcome": 178,
+    "expectancy_pct_per_trade": -0.3902213317463159,
+    "avg_win_pct": 5.640000000000001,
+    "avg_loss_pct": -5.359999999999999,
+    "avg_timeout_pct": -4.068788780003582
+  },
+  "generated_at_utc": "2025-08-29T00:57:55.950113",
+  "output_files": {
+    "csv": "./data/research\\chronovore_research_20250829_005755.csv",
+    "json": "./data/research\\chronovore_research_20250829_005755.summary.json"
+  }
+}

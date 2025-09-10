@@ -1,9 +1,11 @@
-# Core dependencies
-ccxt>=4.1.13       # For crypto exchange data (Coinbase, Binance, etc.)
-requests>=2.31.0   # For HTTP requests (Discord webhook posts, etc.)
-discord-webhook>=1.3.0  # Simple Discord webhook client
-python-dotenv>=1.0.1    # Load .env configuration
-
-# Optional but useful
-pandas>=2.2.2      # For candle/volume data processing
-numpy>=1.26.4      # Math operations
+websocket-client
+websockets
+aiohttp
+requests
+pandas
+numpy
+python-dateutil
+pytz
+ujson
+flask
+gunicorn

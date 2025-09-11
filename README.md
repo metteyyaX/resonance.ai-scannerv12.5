@@ -3,7 +3,8 @@
 ---
 
 ![Resonance.ai Scanner Header](resonance-ai.png)
-
+### 📊 Badges
+[![Python Version](https://img.shields.io/badge/python-%3E%3D3.10-blue.svg)](https://www.python.org/)[![License](https://img.shields.io/badge/license-APACHE2.0-green.svg)](LICENSE)[![Stars](https://img.shields.io/github/stars/metteyyaX/resonance.ai-scannerv13.svg?style=social&label=Stars)](https://github.com/metteyyaX/resonance.ai-scannerv13/stargazers)[![Forks](https://img.shields.io/github/forks/metteyyaX/resonance.ai-scannerv13.svg?style=social&label=Forks)](https://github.com/metteyyaX/resonance.ai-scannerv13/network/members)
 ##  Resonance.ai-Scanner v13
 
 **Real-time crypto breakout scanner** tailored for Coinbase. It tracks momentum shifts through advanced price and volume analytics and delivers **instant alerts to Discord**. Lightweight, open-source, and cloud-ready, this tool is perfect for traders seeking actionable insights at scale.
@@ -66,15 +67,6 @@ python chronovore_research.py
 | `runner.py`            | Standalone runner logic for manual control |
 | `top50finder_v_2_3.py` | Identifies top potential breakout candidates |
 | `chronovore_research.py` | Experimental research workflows |
-
----
-
-### 📊 Badges
-
-[![Python Version](https://img.shields.io/badge/python-%3E%3D3.10-blue.svg)](https://www.python.org/)  
-[![License](https://img.shields.io/badge/license-APACHE2.0-green.svg)](LICENSE)  
-[![Stars](https://img.shields.io/github/stars/metteyyaX/resonance.ai-scannerv13.svg?style=social&label=Stars)](https://github.com/metteyyaX/resonance.ai-scannerv13/stargazers)  
-[![Forks](https://img.shields.io/github/forks/metteyyaX/resonance.ai-scannerv13.svg?style=social&label=Forks)](https://github.com/metteyyaX/resonance.ai-scannerv13/network/members)
 
 ---
 

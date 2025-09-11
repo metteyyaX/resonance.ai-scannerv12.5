@@ -1,0 +1,88 @@
+version: "3.8"
+
+services:
+  scanner:
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: resonance_scanner
+    restart: unless-stopped
+    
+    # Mount volumes for persistent data
+    volumes:
+      - ./data:/app/data
+      - ./envelope.json:/app/envelope.json:ro
+      - ./resonance_scannerv13_3_ws.py:/app/resonance_scannerv13_3_ws.py:ro
+      
+    # Environment variables (optional - uncomment to use)
+    environment:
+      # Storage mode configuration
+      - STORAGE_MODE=${STORAGE_MODE:-csv}  # Options: csv, jsonl, sqlite
+      
+      # Optional: SQLite configuration
+      # - SQLITE_ENABLED=${SQLITE_ENABLED:-false}
+      # - SQLITE_DB_PATH=${SQLITE_DB_PATH:-./data/db/scanner.db}
+      
+      # Optional: Telegram configuration
+      # - TELEGRAM_ENABLED=${TELEGRAM_ENABLED:-false}
+      # - TELEGRAM_TOKEN=${TELEGRAM_TOKEN:-your_bot_token}
+      # - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-your_chat_id}
+      
+      # Scanner configuration
+      - REFRESH_SECONDS=${REFRESH_SECONDS:-1.0}
+      - WEBSOCKET_ENABLED=${WEBSOCKET_ENABLED:-true}
+      
+    # Network mode for better performance
+    network_mode: bridge
+    
+    # Resource limits (adjust as needed)
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    
+    # Logging configuration
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8080/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    command: ["python", "resonance_scannerv13_3_ws.py"]
+
+  # Optional: Web server for serving detection results
+  web-server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: resonance_web
+    restart: unless-stopped
+    
+    volumes:
+      - ./data:/app/data:ro
+      - ./serve_detections.py:/app/serve_detections.py:ro
+      
+    ports:
+      - "8080:8080"
+    
+    command: ["python", "serve_detections.py"]
+    
+    depends_on:
+      - scanner
+
+# Volumes for persistent data
+volumes:
+  scanner_data:
+    driver: local
